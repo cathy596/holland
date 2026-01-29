@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Holland驗（10題）</title>
+  <style>
+:root{
+  /* Base */
+  --bg:#fbfbfd;
+  --ink:#0f172a;          /* 深墨藍 */
+  --muted:#667085;        /* 霧灰藍 */
+  --card:#ffffff;
+  --line:#e6eaf2;
+
+  /* Brand / Accent（主色：藍綠 + 輔色：靛藍） */
+  --accent:#1fa8a8;       /* teal */
+  --accent2:#4f46e5;      /* indigo */
+  --accentSoft:#e6f7f7;   /* teal very light */
+  --accentSoft2:#eef2ff;  /* indigo very light */
+
+  /* Result header / name bar */
+  --purple: linear-gradient(135deg, #1fa8a8, #4f46e5);
+  --bluebar:#eaf6ff;
+
+  /* Shadow / radius */
+  --shadow: 0 10px 28px rgba(15,23,42,.08);
+  --radius:16px;
+
+  /* RIASEC bar colors（柔和但有辨識度） */
+  --cE:#f2b35e; /* warm amber */
+  --cC:#f29d8f; /* soft coral */
+  --cI:#70b7ff; /* calm sky */
+  --cS:#63c6b5; /* mint teal */
+  --cR:#7f9cff; /* periwinkle */
+  --cA:#c48cf2; /* lavender */
+}
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background:linear-gradient(180deg, #f6f8fc, #fbfbfd);
+
+      color:var(--ink);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{width:min(1020px, 100%); padding:18px 14px 70px}
+
+    /* top step header (for question pages) */
+    .topbar{
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+      padding:14px 16px;border:1px solid var(--line);
+      background: rgba(255,255,255,.85);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      position:sticky;top:10px;z-index:10;backdrop-filter: blur(10px);
+      margin-bottom:14px;
+    }
+    .title{display:flex;flex-direction:column;gap:6px}
+    .title h1{margin:0;font-size:18px;font-weight:900}
+    .title p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.3}
+    .progress{min-width:260px;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+    .ptext{color:var(--muted);font-size:12.5px}
+    .bar{width:260px;height:10px;border-radius:999px;background:#eef2ff;border:1px solid var(--line);overflow:hidden}
+ .bar > div{
+  height:100%;
+  width:0;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  border-radius:999px
+}
+
+ border-radius:999px}
+    @media (max-width:860px){ .progress{min-width:180px} .bar{width:180px} }
+
+    /* question card */
+    .card{
+      border:1px solid var(--line);
+      background: var(--card);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hd{
+      padding:14px 16px;border-bottom:1px solid var(--line);
+      display:flex;gap:12px;align-items:flex-start;justify-content:space-between
+    }
+ .qno{
+  font-weight:900;
+  color:#fff;
+  background: rgba(79,70,229,.92);
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  white-space:nowrap
+}
+
+    .qtext{flex:1}
+    .qtext .qtitle{margin:0 0 6px;font-weight:900}
+    .qtext .qdesc{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+    .body{padding:14px 16px}
+    .hint{color:var(--muted);font-size:12.5px;margin:0 0 10px;line-height:1.45}
+
+    /* sort UI */
+    .rankbox{display:grid;grid-template-columns:repeat(6, minmax(0,1fr));gap:10px;margin-bottom:12px}
+    .slot{
+      border:1px dashed rgba(109,118,138,.35);
+      background: #fbfcff;
+      border-radius:14px;
+      min-height:62px;
+      padding:8px 8px 10px;
+      display:flex;flex-direction:column;gap:6px;justify-content:center
+    }
+    .slot .lab{font-size:11px;color:var(--muted)}
+    .slot .pick{
+      font-size:13px;font-weight:900;line-height:1.15;
+      display:flex;align-items:center;justify-content:space-between;gap:8px
+    }
+    .slot .x{
+      font-size:12px;color:#b11212;
+      border:1px solid rgba(224,106,106,.45);
+      background: rgba(224,106,106,.10);
+      padding:2px 8px;border-radius:999px;cursor:pointer;
+      opacity:.95
+    }
+    .slot.empty .pick{color:rgba(27,31,42,.35);font-weight:800}
+
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{
+      padding:12px 12px;border-radius:14px;
+      border:1px solid var(--line);
+      background: #ffffff;
+      cursor:pointer;user-select:none;
+      display:flex;align-items:center;justify-content:center;
+      min-width:150px;
+      font-weight:900;
+      transition:.15s transform,.15s border-color,.15s box-shadow;
+      box-shadow: 0 3px 10px rgba(15,23,42,.05);
+    }
+    .chip:hover{transform:translateY(-1px);border-color:rgba(124,92,255,.35)}
+    .chip.disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+    /* scale UI */
+    .scale{display:grid;gap:12px}
+    .row{
+      border:1px solid var(--line);
+      background: #fbfcff;
+      border-radius:14px;padding:10px 12px
+    }
+    .rowtop{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .lbl{font-weight:900}
+    .pill{font-size:11px;color:var(--muted);border:1px solid rgba(109,118,138,.25);padding:2px 8px;border-radius:999px}
+    .scoreline{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap}
+    .scoreBtns{display:flex;gap:6px;flex-wrap:wrap}
+    .sbtn{
+      width:36px;height:34px;border-radius:12px;
+      border:1px solid rgba(109,118,138,.25);
+      background: #ffffff;
+      color:var(--ink);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;font-weight:900;
+      transition:.12s transform,.12s border-color,.12s background
+    }
+    .sbtn:hover{transform:translateY(-1px);border-color:rgba(124,92,255,.35)}
+  .sbtn.active{
+  background: rgba(31,168,168,.12);
+  border-color: rgba(31,168,168,.55);
+  box-shadow: 0 0 0 3px rgba(31,168,168,.10) inset;
+}
+
+    .ends{display:flex;gap:8px;color:var(--muted);font-size:11px;white-space:nowrap}
+
+    /* nav */
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:14px}
+    .leftNav{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    button{
+      border:1px solid var(--line);
+      background: #ffffff;
+      color:var(--ink);
+      padding:10px 12px;border-radius:14px;
+      cursor:pointer;transition:.15s transform, .15s border-color;
+      font-weight:900
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(31,168,168,.35)}
+    button:active{transform:translateY(0)}
+  .primary{
+  background: linear-gradient(180deg, rgba(31,168,168,.98), rgba(79,70,229,.86));
+  color:#fff;
+  border-color:rgba(31,168,168,.45)
+}
+
+    .ghost{background:transparent}
+    .danger{border-color:rgba(224,106,106,.55)}
+    .danger:hover{border-color:rgba(224,106,106,.85)}
+    .msg{color:var(--muted);font-size:12.5px}
+
+    /* ========== RESULT PAGE (match screenshot) ========== */
+    .section{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      margin-top:14px;
+    }
+    .secHead{
+      background: var(--purple);
+      color:#fff;
+      padding:14px 18px;
+      font-weight:900;
+      letter-spacing:.2px;
+      display:flex;align-items:center;gap:10px;
+      font-size:22px;
+    }
+    .secBody{padding:16px 18px 18px}
+    .namebar{
+      background: var(--bluebar);
+      border-radius:16px;
+      padding:16px 18px;
+      display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+      font-weight:900;
+      color:#1c6fb8;
+      margin-bottom:14px;
+    }
+    .namebar .lab{font-size:28px}
+    .namebar .sub{font-size:28px}
+    .namebar input{
+      border:1px solid rgba(28,111,184,.25);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:16px;
+      font-weight:800;
+      outline:none;
+      min-width:220px;
+      background:#fff;
+    }
+
+    .analysisGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width:900px){ .analysisGrid{grid-template-columns:1fr} }
+
+    .barList{display:grid;gap:14px}
+    .barItem{display:grid;grid-template-columns: 34px 92px 1fr 70px;gap:12px;align-items:center}
+    .bubble{
+      width:30px;height:30px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:900;
+      font-size:14px;
+    }
+    .tname{font-weight:900;font-size:22px}
+    .track2{
+      height:18px;border-radius:10px;background:#f3f5fb;
+      position:relative;overflow:hidden;border:1px solid #eef1f7;
+    }
+    .fill2{height:100%;width:0;border-radius:10px}
+    .scoreTag{
+      font-weight:900;
+      color:#fff;
+      padding:6px 10px;
+      border-radius:10px;
+      text-align:center;
+      font-size:14px;
+      min-width:66px;
+    }
+
+    .ruleBox{
+      color:#3b3f4b;
+      font-size:18px;
+      line-height:1.8;
+      padding-top:6px;
+    }
+    .ruleBox b{font-weight:900}
+    .ruleBox .hi{color:#e53935;font-weight:900}
+    .ruleBox .mid{color:#f59e0b;font-weight:900}
+    .ruleBox .lo{color:#3b82f6;font-weight:900}
+
+    .resultCode{
+      margin-top:16px;
+      background: var(--bluebar);
+      border-radius:16px;
+      padding:16px 18px;
+      font-weight:900;
+      color:#1c6fb8;
+      font-size:26px;
+    }
+    .resultCode span{color:#1aa3a3}
+
+    .pillBtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+    .pillBtn{
+      background:#4aaaf0;
+      color:#fff;
+      font-weight:900;
+      border-radius:16px;
+      padding:12px 18px;
+      border:none;
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(74,170,240,.22);
+      font-size:22px;
+    }
+    .pillBtn:hover{filter:brightness(.97)}
+
+    /* Guide section */
+    .guideGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    @media (max-width:900px){ .guideGrid{grid-template-columns:1fr} }
+
+    .guideCard{
+      border:1px solid var(--line);
+      border-radius:0;
+      background:#fff;
+      min-height:320px;
+      display:flex;
+      flex-direction:column;
+    }
+    .guideTitle{
+      font-weight:900;
+      font-size:26px;
+      color:#fff;
+      padding:16px 16px;
+      text-align:center;
+    }
+    .gBody{
+      padding:16px 18px;
+      color:#60656f;
+      font-size:20px;
+      line-height:1.75;
+      flex:1;
+    }
+    .imgCard{
+      border:1px solid var(--line);
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      min-height:320px;
+    }
+    .clarity{
+      margin-top:16px;
+      font-size:22px;
+      font-weight:900;
+      color:#2c7bd3;
+    }
+    .clarityNote{
+      margin-top:8px;
+      color:#5b6270;
+      font-size:20px;
+      line-height:1.7;
+    }
+
+    /* small helper */
+    .gap{height:12px}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- Question header (hidden on result) -->
+    <div class="topbar" id="topbar">
+      <div class="title">
+        <h1>Holland測驗（10題）</h1>
+        <p id="subtitle">請依直覺作答</p>
+      </div>
+      <div class="progress">
+        <div class="ptext" id="ptext">第 1 / 11 頁</div>
+        <div class="bar"><div id="pbar"></div></div>
+      </div>
+    </div>
+
+    <div class="card" id="pageCard"></div>
+
+  </div>
+
+<script>
+/** ====== RIASEC（內部計分 & 結果呈現用） ====== */
+const RIASEC = [
+  { key:"R", name:"實做型",  desc:"喜歡動手做、工具設備、把東西修好做出來。", emoji:"🔧" },
+  { key:"I", name:"研究型",  desc:"善於觀察、思考、分析推理，喜歡用頭腦解決問題並追根究底。", emoji:"🔍" },
+  { key:"A", name:"藝術型",  desc:"重視創意與美感，喜歡表達風格、設計、發想。", emoji:"🎨" },
+  { key:"S", name:"社交型",  desc:"樂於助人、喜歡互動與引導，重視人的感受。", emoji:"🤝" },
+  { key:"E", name:"企業型",  desc:"精力旺盛、喜歡競爭與影響他人，擅長推動與說服。", emoji:"📣" },
+  { key:"C", name:"常規型",  desc:"謹慎有條理，喜歡規矩與精確，擅長整理與流程。", emoji:"🗂️" },
+];
+const keyToMeta = Object.fromEntries(RIASEC.map(x => [x.key, x]));
+/** ====== 興趣導航：白話解析（加強版） ====== */
+const TYPE_GUIDE = {
+  A: {
+    tagline: "靠靈感吃飯的人",
+    bullets: [
+      "喜歡創意、設計、表達自我，對美感很敏感，腦中常常很多點子",
+      "適合畫畫、寫作、設計、表演這種可以自由發揮的工作",
+      "不太愛被規則綁住，實務細節和瑣事比較容易覺得煩",
+    ],
+  },
+  C: {
+    tagline: "會把事情整理好的人",
+    bullets: [
+      "喜歡有流程、有規則、有表格的工作，重視穩定與秩序",
+      "很適合行政、會計、文書、專案管理",
+      "做事細心負責，但對變化和臨時改動比較沒那麼喜歡",
+    ],
+  },
+  E: {
+    tagline: "天生帶頭衝的人",
+    bullets: [
+      "喜歡主導、說服、影響他人，有企圖心和行動力",
+      "適合創業、業務、主管、行銷、帶團隊",
+      "有時會比較急、重結果，細節和耐心要靠別人補",
+    ],
+  },
+  I: {
+    tagline: "腦力型玩家",
+    bullets: [
+      "喜歡分析、研究、找答案，對數字、理論、邏輯有興趣",
+      "適合工程師、研究員、數據分析、顧問",
+      "比較享受獨立工作，社交和情緒表達不是最強項",
+    ],
+  },
+  R: {
+    tagline: "動手做最安心",
+    bullets: [
+      "喜歡實際操作、修理、建造，看得到成果最有成就感",
+      "適合工程、技術、維修、戶外工作",
+      "不太愛空談理論，比較不擅長表達內心感受",
+    ],
+  },
+  S: {
+    tagline: "為了人而存在的人",
+    bullets: [
+      "喜歡幫助別人、聊天、陪伴、教學，很有同理心",
+      "適合老師、社工、諮詢、客服、教練",
+      "怕衝突、不太愛做冷冰冰的決策",
+    ],
+  },
+};
+
+/** ====== 題庫：1~6 排序題（UI不顯示型別） ====== */
+const sortQuestions = [
+  { id:1, title:"新創公司專案",
+    desc:"你剛加入一間新創公司，團隊正在開發全新產品，老闆請大家自行選擇最想投入的工作內容，請依照你內心真實偏好排序",
+    options:[ {text:"組裝測試",type:"R"},{text:"數據分析",type:"I"},{text:"視覺設計",type:"A"},{text:"團隊關懷",type:"S"},{text:"對外行銷",type:"E"},{text:"文件整理",type:"C"} ]
+  },
+  { id:2, title:"大型活動籌備",
+    desc:"你參與一場大型活動的籌備團隊，大家可以自由選擇最想負責的工作內容，沒有對錯，只看你的真實偏好",
+    options:[ {text:"架設設備",type:"R"},{text:"流程規劃",type:"I"},{text:"主視覺設計",type:"A"},{text:"接待來賓",type:"S"},{text:"招募贊助",type:"E"},{text:"名單管理",type:"C"} ]
+  },
+  { id:3, title:"研究計畫團隊",
+    desc:"你被邀請加入跨領域研究計畫，團隊需要分工合作完成任務，請依你最想投入的角色排序",
+    options:[ {text:"操作儀器",type:"R"},{text:"邏輯推理",type:"I"},{text:"發想概念",type:"A"},{text:"引導受試者",type:"S"},{text:"成果發表",type:"E"},{text:"數據整理",type:"C"} ]
+  },
+  { id:4, title:"旅行突發狀況",
+    desc:"你和朋友出國旅行時遇到突發狀況，原定行程被打亂，大家需要臨時分工處理，請依你自然會想做的事排序",
+    options:[ {text:"處理交通方式",type:"R"},{text:"重新規劃路線",type:"I"},{text:"想新玩法",type:"A"},{text:"安撫團員",type:"S"},{text:"協商溝通",type:"E"},{text:"更新行程",type:"C"} ]
+  },
+  { id:5, title:"經營自媒體",
+    desc:"你要和朋友一起經營自媒體頻道，每個人分工合作，請依你最想負責的部分排序",
+    options:[ {text:"拍攝剪輯",type:"R"},{text:"主題研究",type:"I"},{text:"內容創意",type:"A"},{text:"社群互動",type:"S"},{text:"商業合作",type:"E"},{text:"後台管理",type:"C"} ]
+  },
+  { id:6, title:"任務模擬系統",
+    desc:"你進入一個任務模擬系統，只能選擇一個主要角色來完成任務，請依你最想扮演的角色排序",
+    options:[ {text:"修復系統",type:"R"},{text:"問題分析",type:"I"},{text:"創意策略",type:"A"},{text:"心理支援",type:"S"},{text:"任務指揮",type:"E"},{text:"資訊管理",type:"C"} ]
+  },
+];
+
+/** ====== 題庫：7~10 量表題（點 1~7；UI不顯示型別） ====== */
+const scaleSets = [
+  { id:7, title:"個性傾向量表",
+    desc:"請依你真實的個性選擇符合程度",
+    left:"最不符合", right:"最符合",
+    items:[
+      {text:"喜歡動手做事",type:"R"},{text:"偏好直接行動",type:"R"},
+      {text:"愛追根究底",type:"I"},{text:"對新知好奇",type:"I"},
+      {text:"重視美感創意",type:"A"},{text:"喜歡自我表達",type:"A"},
+      {text:"容易感受他人",type:"S"},{text:"喜歡幫人成長",type:"S"},
+      {text:"享受影響他人",type:"E"},{text:"想帶領推動",type:"E"},
+      {text:"喜歡規則流程",type:"C"},{text:"做事注意細節",type:"C"},
+    ]
+  },
+  { id:8, title:"活動興趣量表",
+    desc:"請依你對以下活動的喜好作答",
+    left:"最不喜歡", right:"最喜歡",
+    items:[
+      {text:"操作工具設備",type:"R"},{text:"DIY 組裝安裝",type:"R"},
+      {text:"蒐集資料分析",type:"I"},{text:"解決邏輯難題",type:"I"},
+      {text:"繪畫設計作品",type:"A"},{text:"發想創意點子",type:"A"},
+      {text:"關心他人狀態",type:"S"},{text:"教導陪伴他人",type:"S"},
+      {text:"說服影響他人",type:"E"},{text:"主導團體活動",type:"E"},
+      {text:"整理文件資料",type:"C"},{text:"建立流程系統",type:"C"},
+    ]
+  },
+  { id:9, title:"職業喜好量表",
+    desc:"不考慮能力與現實條件，請依你對職業的直覺喜好作答",
+    left:"最不喜歡", right:"最喜歡",
+    items:[
+      {text:"設備維修人員",type:"R"},{text:"工程技術人員",type:"R"},
+      {text:"研究分析人員",type:"I"},{text:"數據科學工作",type:"I"},
+      {text:"視覺設計工作",type:"A"},{text:"內容創作工作",type:"A"},
+      {text:"心理輔導工作",type:"S"},{text:"教育教學工作",type:"S"},
+      {text:"行銷企劃主管",type:"E"},{text:"創業經營者",type:"E"},
+      {text:"行政管理人員",type:"C"},{text:"會計事務人員",type:"C"},
+    ]
+  },
+  { id:10, title:"能力自評量表",
+    desc:"請依你對自身能力的感覺作答",
+    left:"最不符合", right:"最符合",
+    items:[
+      {text:"能操作工具設備",type:"R"},{text:"能解決技術問題",type:"R"},
+      {text:"擅長分析推理",type:"I"},{text:"能理解複雜概念",type:"I"},
+      {text:"能創作或設計",type:"A"},{text:"想像力很豐富",type:"A"},
+      {text:"能體察他人情緒",type:"S"},{text:"人際相處很順",type:"S"},
+      {text:"能影響他人決策",type:"E"},{text:"能帶領團隊行動",type:"E"},
+      {text:"善於規劃與整理",type:"C"},{text:"做事細心有條理",type:"C"},
+    ]
+  }
+];
+
+/** ====== Pages ====== */
+const pages = [
+  ...sortQuestions.map(q => ({ kind:"sort", id:q.id, data:q })),
+  ...scaleSets.map(s => ({ kind:"scale", id:s.id, data:s })),
+  { kind:"result", id:11, data:null },
+];
+
+/** ====== State ====== */
+const state = {
+  pageIndex: 0,
+  sortAnswers: {},
+  scaleAnswers: {},
+  userName: "",
+};
+
+const pageCard = document.getElementById("pageCard");
+const ptext = document.getElementById("ptext");
+const pbar = document.getElementById("pbar");
+const subtitle = document.getElementById("subtitle");
+const topbar = document.getElementById("topbar");
+
+function renderPage(){
+  const page = pages[state.pageIndex];
+  pageCard.innerHTML = "";
+
+  if (page.kind === "result"){
+    topbar.style.display = "none";
+    pageCard.style.display = "none"; // 用 section 方式畫結果
+    renderResultSections();
+    window.scrollTo({top:0, behavior:"smooth"});
+    return;
+  }
+
+  // questions
+  topbar.style.display = "flex";
+  pageCard.style.display = "block";
+  pageCard.innerHTML = "";
+  updateHeader();
+
+  if (page.kind === "sort") pageCard.appendChild(renderSortPage(page.data));
+  if (page.kind === "scale") pageCard.appendChild(renderScalePage(page.data));
+}
+
+function updateHeader(){
+  const cur = state.pageIndex + 1;
+  const total = pages.length;
+  ptext.textContent = `第 ${cur} / ${total} 頁`;
+  pbar.style.width = `${(cur/total)*100}%`;
+
+}
+
+/** ====== Sort Page ====== */
+function renderSortPage(q){
+  const frag = document.createElement("div");
+
+  const hd = document.createElement("div");
+  hd.className = "hd";
+  hd.innerHTML = `
+    <div class="qno">題目 ${q.id}</div>
+    <div class="qtext">
+      <p class="qtitle">${esc(q.title)}</p>
+      <p class="qdesc">${esc(q.desc)}</p>
+    </div>
+  `;
+  frag.appendChild(hd);
+
+  const body = document.createElement("div");
+  body.className = "body";
+
+  const hint = document.createElement("p");
+  hint.className = "hint";
+  body.appendChild(hint);
+
+  const picks = state.sortAnswers[q.id] || [];
+
+  const rankbox = document.createElement("div");
+  rankbox.className = "rankbox";
+  for (let r=0; r<6; r++){
+    const optIdx = picks[r];
+    const isEmpty = (optIdx === undefined);
+    const slot = document.createElement("div");
+    slot.className = "slot" + (isEmpty ? " empty" : "");
+    slot.innerHTML = `
+      <div class="lab">第 ${r+1} 名</div>
+      <div class="pick">
+        <span>${esc(isEmpty ? "（尚未選擇）" : q.options[optIdx].text)}</span>
+        ${isEmpty ? "" : `<span class="x" data-r="${r}">×</span>`}
+      </div>
+    `;
+    rankbox.appendChild(slot);
+  }
+  body.appendChild(rankbox);
+
+  const chips = document.createElement("div");
+  chips.className = "chips";
+  q.options.forEach((opt, idx) => {
+    const used = picks.includes(idx);
+    const chip = document.createElement("div");
+    chip.className = "chip" + (used ? " disabled" : "");
+    chip.textContent = opt.text;
+    chip.addEventListener("click", () => {
+      if (used) return;
+      const cur = state.sortAnswers[q.id] ? [...state.sortAnswers[q.id]] : [];
+      if (cur.length >= 6) return;
+      cur.push(idx);
+      state.sortAnswers[q.id] = cur;
+      renderPage();
+    });
+    chips.appendChild(chip);
+  });
+  body.appendChild(chips);
+
+  body.addEventListener("click", (e) => {
+    const x = e.target.closest(".x");
+    if (!x) return;
+    const r = Number(x.dataset.r);
+    const cur = state.sortAnswers[q.id] ? [...state.sortAnswers[q.id]] : [];
+    cur.splice(r, 1);
+    if (cur.length) state.sortAnswers[q.id] = cur;
+    else delete state.sortAnswers[q.id];
+    renderPage();
+  });
+
+  body.appendChild(renderNav({
+    canPrev: state.pageIndex > 0,
+    canNext: picks.length === 6,
+    nextLabel: (state.pageIndex === pages.length - 2) ? "看結果" : "下一題",
+    onPrev: () => { state.pageIndex--; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    onNext: () => { state.pageIndex++; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    extraLeftButtons: [
+      { label:"重新選擇", className:"ghost danger", onClick: () => { delete state.sortAnswers[q.id]; renderPage(); } }
+    ],
+  }));
+
+  frag.appendChild(body);
+  return frag;
+}
+
+/** ====== Scale Page (require all items chosen) ====== */
+function renderScalePage(set){
+  const frag = document.createElement("div");
+
+  const hd = document.createElement("div");
+  hd.className = "hd";
+  hd.innerHTML = `
+    <div class="qno">題目 ${set.id}</div>
+    <div class="qtext">
+      <p class="qtitle">${esc(set.title)}</p>
+      <p class="qdesc">${esc(set.desc)}</p>
+    </div>
+  `;
+  frag.appendChild(hd);
+
+  const body = document.createElement("div");
+  body.className = "body";
+
+  const hint = document.createElement("p");
+  hint.className = "hint";
+  body.appendChild(hint);
+
+  if (!state.scaleAnswers[set.id]) state.scaleAnswers[set.id] = {};
+
+  const scale = document.createElement("div");
+  scale.className = "scale";
+
+  set.items.forEach((it, idx) => {
+    const v = state.scaleAnswers[set.id][idx] ?? null;
+
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div class="rowtop">
+        <div class="lbl">${esc(it.text)}</div>
+        <div><span class="pill" id="sv-${set.id}-${idx}">分數：${v ?? "未選"}</span></div>
+      </div>
+      <div class="scoreline">
+        <div class="ends"><span>${esc(set.left)}（1）</span></div>
+        <div class="scoreBtns"></div>
+        <div class="ends"><span>${esc(set.right)}（7）</span></div>
+      </div>
+    `;
+
+    const btnWrap = row.querySelector(".scoreBtns");
+    for (let s=1; s<=7; s++){
+      const b = document.createElement("div");
+      b.className = "sbtn" + (s === v ? " active" : "");
+      b.textContent = String(s);
+      b.addEventListener("click", () => {
+        state.scaleAnswers[set.id][idx] = s;
+        btnWrap.querySelectorAll(".sbtn").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        row.querySelector(`#sv-${set.id}-${idx}`).textContent = `分數：${s}`;
+        updateNavState(set);
+      });
+      btnWrap.appendChild(b);
+    }
+
+    scale.appendChild(row);
+  });
+
+  body.appendChild(scale);
+
+  const nav = renderNav({
+    canPrev: state.pageIndex > 0,
+    canNext: isScaleComplete(set.id, set.items.length),
+    nextLabel: (state.pageIndex === pages.length - 2) ? "看結果" : "下一題",
+    onPrev: () => { state.pageIndex--; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    onNext: () => { state.pageIndex++; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    extraLeftButtons: [
+      { label:"全部清除", className:"ghost danger", onClick: () => { state.scaleAnswers[set.id] = {}; renderPage(); } }
+    ],
+    note: scaleNote(set.id, set.items.length)
+  });
+  nav.id = "nav";
+  body.appendChild(nav);
+
+  frag.appendChild(body);
+  return frag;
+}
+
+function renderNav({canPrev, canNext, nextLabel, onPrev, onNext, extraLeftButtons=[], note=""}){
+  const nav = document.createElement("div");
+  nav.className = "nav";
+
+  const left = document.createElement("div");
+  left.className = "leftNav";
+
+  extraLeftButtons.forEach(b => {
+    const btn = document.createElement("button");
+    btn.className = b.className || "ghost";
+    btn.textContent = b.label;
+    btn.addEventListener("click", b.onClick);
+    left.appendChild(btn);
+  });
+
+  if (canPrev){
+    const prev = document.createElement("button");
+    prev.className = "ghost";
+    prev.textContent = "上一題";
+    prev.addEventListener("click", onPrev);
+    left.appendChild(prev);
+  }
+
+  const right = document.createElement("div");
+  right.className = "leftNav";
+
+  const msg = document.createElement("div");
+  msg.className = "msg";
+  msg.id = "navMsg";
+  msg.textContent = note;
+
+  const next = document.createElement("button");
+  next.className = "primary";
+  next.textContent = nextLabel;
+  next.disabled = !canNext;
+  if (next.disabled){
+    next.style.opacity = ".45";
+    next.style.cursor = "not-allowed";
+    next.style.transform = "none";
+  }
+  next.addEventListener("click", () => {
+    if (!next.disabled) onNext();
+  });
+
+  right.appendChild(msg);
+  right.appendChild(next);
+
+  nav.appendChild(left);
+  nav.appendChild(right);
+  return nav;
+}
+
+function updateNavState(set){
+  const nav = document.getElementById("nav");
+  if (!nav) return;
+  const nextBtn = nav.querySelector("button.primary");
+  const msg = document.getElementById("navMsg");
+  const ok = isScaleComplete(set.id, set.items.length);
+  msg.textContent = scaleNote(set.id, set.items.length);
+
+  nextBtn.disabled = !ok;
+  nextBtn.style.opacity = ok ? "1" : ".45";
+  nextBtn.style.cursor = ok ? "pointer" : "not-allowed";
+}
+
+function isScaleComplete(setId, n){
+  const a = state.scaleAnswers[setId] || {};
+  for (let i=0; i<n; i++){
+    const v = a[i];
+    if (!(v >= 1 && v <= 7)) return false;
+  }
+  return true;
+}
+function scaleNote(setId, n){
+  const a = state.scaleAnswers[setId] || {};
+  let filled = 0;
+  for (let i=0; i<n; i++){
+    const v = a[i];
+    if (v >= 1 && v <= 7) filled++;
+  }
+  return (filled === n) ? "可以下一題" : `還差 ${n - filled} 小題`;
+}
+
+/** ====== Scoring ====== */
+function computeRawScores(){
+  const score = {R:0,I:0,A:0,S:0,E:0,C:0};
+
+  // sort: rank points 6..1
+  sortQuestions.forEach(q => {
+    const picks = state.sortAnswers[q.id];
+    if (!picks || picks.length !== 6) return;
+    for (let rank=0; rank<6; rank++){
+      const opt = q.options[picks[rank]];
+      score[opt.type] += (6 - rank);
+    }
+  });
+
+  // scale: direct add 1..7
+  scaleSets.forEach(set => {
+    const a = state.scaleAnswers[set.id] || {};
+    set.items.forEach((it, idx) => {
+      score[it.type] += Number(a[idx] ?? 0);
+    });
+  });
+
+  return score;
+}
+
+// max per type: sort max 6*6=36; scale max 8 items per type? here each set has 2 per type => 4 sets => 8 items => 8*7=56; total 92
+const MAX_PER_TYPE = 92;
+
+function to100(raw){ return (raw / MAX_PER_TYPE) * 100; }
+
+function getTop3(scoreRaw){
+  const sorted = Object.entries(scoreRaw).sort((a,b)=>b[1]-a[1]);
+  return sorted.slice(0,3).map(([k,v])=>k);
+}
+
+function getClarityLabel(top1){
+  // 用 0~100 的 top1 來判斷（跟你截圖那段規則一致）
+  if (top1 >= 70) return "較高";
+  if (top1 >= 55) return "中等";
+  return "較低";
+}
+
+/** ====== Result Sections (Analysis + Guide) ====== */
+function renderResultSections(){
+  // remove any previous sections
+  document.querySelectorAll(".section").forEach(x => x.remove());
+
+  const raw = computeRawScores();
+  const score100 = Object.fromEntries(Object.entries(raw).map(([k,v])=>[k,to100(v)]));
+  const top3 = getTop3(raw);
+  const code = top3.join("");
+
+  // order fixed like screenshot
+  const order = ["E","C","I","S","R","A"];
+
+  const dateStr = formatDate(new Date());
+  const top1Score = score100[top3[0]];
+
+  // ===== Analysis
+  const sec1 = document.createElement("div");
+  sec1.className = "section";
+  sec1.innerHTML = `
+    <div class="secHead">◷ 結果分析 Analysis</div>
+    <div class="secBody">
+      <div class="namebar">
+        <div class="lab">姓名：</div>
+        <input id="nameInput" placeholder="請輸入姓名" value="${esc(state.userName)}" />
+        <div class="sub">日期：${dateStr}</div>
+      </div>
+
+      <div class="analysisGrid">
+        <div class="barList" id="barList"></div>
+
+        <div class="ruleBox">
+          以上分數用來表示你對該類型之興趣程度高低：<br>
+          <span class="hi">70分以上</span>：興趣程度較高，可優先選擇此類型發展。<br>
+          <span class="mid">55~69分</span>：興趣程度中等，不特別喜歡但尚可接受。<br>
+          <span class="lo">54分以下</span>：興趣程度較低，甚至可能有些排斥。
+        </div>
+      </div>
+
+      <div class="resultCode">
+        你的興趣結果： <span>${code}</span>
+      </div>
+
+
+      <div class="gap"></div>
+
+      <div class="nav">
+        <div class="leftNav">
+          <button class="ghost" id="backToQ">回到上一題</button>
+          <button class="danger ghost" id="resetAll">全部重填</button>
+        </div>
+        <div class="leftNav">
+          <button class="primary" id="copyBtn">複製結果</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.querySelector(".wrap").appendChild(sec1);
+
+  // draw bars
+  const barList = document.getElementById("barList");
+  order.forEach(k => {
+    const m = keyToMeta[k];
+    const v = score100[k];
+    const row = document.createElement("div");
+    row.className = "barItem";
+    row.innerHTML = `
+      <div class="bubble" style="background: var(--c${k});">${k}</div>
+      <div class="tname">${m.name}</div>
+      <div class="track2"><div class="fill2" style="background: var(--c${k}); width:${Math.max(0,Math.min(100,v))}%;"></div></div>
+      <div class="scoreTag" style="background: var(--c${k});">${v.toFixed(2)}</div>
+    `;
+    barList.appendChild(row);
+  });
+
+  // name binding
+  const nameInput = document.getElementById("nameInput");
+  nameInput.addEventListener("input", () => { state.userName = nameInput.value.trim(); });
+
+  // copy/back/reset
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const sorted = Object.entries(score100).sort((a,b)=>b[1]-a[1]);
+    const top3txt = sorted.slice(0,3).map(([k,v]) => `${keyToMeta[k].name} ${v.toFixed(2)}`).join(" / ");
+    const txt = `姓名：${state.userName || "（未填）"}\n日期：${dateStr}\n興趣結果：${code}\nTop3：${top3txt}\n分數：` +
+      order.map(k => `${k}:${score100[k].toFixed(2)}`).join(", ");
+    try{ await navigator.clipboard.writeText(txt); alert("已複製到剪貼簿 ✅"); }
+    catch{ prompt("複製失敗，請手動複製：", txt); }
+  });
+
+  document.getElementById("backToQ").addEventListener("click", () => {
+    // go back to Q10 page
+    document.querySelectorAll(".section").forEach(x => x.remove());
+    topbar.style.display = "flex";
+    pageCard.style.display = "block";
+    state.pageIndex = pages.length - 2;
+    renderPage();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  document.getElementById("resetAll").addEventListener("click", () => {
+    if (!confirm("確定要全部重填嗎？")) return;
+    state.pageIndex = 0;
+    state.sortAnswers = {};
+    state.scaleAnswers = {};
+    state.userName = "";
+    document.querySelectorAll(".section").forEach(x => x.remove());
+    topbar.style.display = "flex";
+    pageCard.style.display = "block";
+    renderPage();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  // ===== Guide
+  const sec2 = document.createElement("div");
+  sec2.className = "section";
+  sec2.innerHTML = `
+    <div class="secHead">▶ 興趣導航 Guide</div>
+    <div class="secBody">
+      <div class="guideGrid">
+        ${guideTypeCard("主型", top3[0], true)}
+        ${guideTypeCard("副型", top3[1], false)}
+        ${guideTypeCard("副型", top3[2], false)}
+      </div>
+    </div>
+  `;
+  document.querySelector(".wrap").appendChild(sec2);
+} // ✅ 這個一定要有！！renderResultSections 到這裡結束
+
+
+
+function guideTypeCard(roleLabel, typeKey, isMain){
+  const m = keyToMeta[typeKey];
+  const g = TYPE_GUIDE[typeKey] || { tagline:"", bullets:[] };
+
+const bg = isMain
+  ? "linear-gradient(135deg, rgba(79,70,229,.95), rgba(31,168,168,.95))"
+  : "linear-gradient(135deg, rgba(242,179,94,.95), rgba(31,168,168,.75))";
+
+
+  const bulletsHtml = (g.bullets || [])
+    .map(t => `<li>${esc(t)}</li>`)
+    .join("");
+
+  return `
+    <div class="guideCard">
+      <div class="guideTitle" style="background:${bg}">
+        ${roleLabel}：${m.name}
+      </div>
+
+      <div class="gBody">
+        <div style="font-weight:900;color:#2c7bd3;margin-bottom:8px;">
+          ${typeKey} ${m.name}：${esc(g.tagline)}
+        </div>
+
+        <ul style="margin:0;padding-left:22px;">
+          ${bulletsHtml}
+        </ul>
+
+        <div style="margin-top:10px;color:#8a93a3;font-size:16px;line-height:1.6;">
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/** ====== Result Nav ====== */
+function goToResult(){
+  state.pageIndex = pages.length - 1;
+  renderPage();
+}
+
+/** ====== Utilities ====== */
+function esc(str){
+  return String(str ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function formatDate(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${y}/${m}/${dd}`;
+}
+
+/** ====== Init ====== */
+renderPage();
+
+// When last question "next" pressed, it naturally goes to result page because pages include result as last page.
+// So ensure Q10 next goes to result:
+(function patchLastNext(){
+  // nothing needed; pages already include result, navigation increments pageIndex.
+})();
+</script>
+</body>
+</html>
+
