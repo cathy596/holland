@@ -1,0 +1,1745 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Holland驗（10題）</title>
+ <style>
+:root{
+  /* Base */
+  --bg:#fbfbfd;
+  --ink:#0f172a;
+  --muted:#667085;
+  --card:#ffffff;
+  --line:#e6eaf2;
+
+  /* Cover (橘色系) */
+  --coverMain:#f59e0b;
+  --coverSub:#fbbf24;
+  --coverSoft:#fff7e6;
+  --coverDeep:#ea580c;
+
+  /* Brand / Accent（teal + indigo） */
+  --accent:#1fa8a8;
+  --accent2:#4f46e5;
+  --accentSoft:#e6f7f7;
+  --accentSoft2:#eef2ff;
+
+  /* Result header / name bar */
+  --purple: linear-gradient(135deg, #1fa8a8, #4f46e5);
+  --bluebar:#eaf6ff;
+
+  /* Shadow / radius */
+  --shadow: 0 10px 28px rgba(15,23,42,.08);
+  --radius:16px;
+
+  /* RIASEC bar colors */
+  --cE:#f2b35e;
+  --cC:#f29d8f;
+  --cI:#70b7ff;
+  --cS:#63c6b5;
+  --cR:#7f9cff;
+  --cA:#c48cf2;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: #fff7e6;  /* 奶油淡橘 */
+  color:var(--ink);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+}
+
+
+.wrap{width:min(1020px, 100%); padding:18px 14px 70px}
+/* 題目頁：加一點淡淡底色（只影響題目區） */
+#pageCard{
+  background: linear-gradient(180deg, rgba(245,158,11,.06), rgba(79,70,229,.03));
+  border-radius: 22px;
+  padding: 14px;
+}
+
+/* 讓內層 card 還是白的、浮起來 */
+#pageCard .card{
+  background: #fff;
+}
+
+/* top step header */
+.topbar{
+  display:flex;gap:14px;align-items:center;justify-content:space-between;
+  padding:14px 16px;border:1px solid var(--line);
+  background: rgba(255,255,255,.85);
+  border-radius:var(--radius);
+  box-shadow: var(--shadow);
+  position:sticky;top:10px;z-index:10;backdrop-filter: blur(10px);
+  margin-bottom:14px;
+}
+.title{display:flex;flex-direction:column;gap:6px}
+.title h1{margin:0;font-size:18px;font-weight:900}
+.title p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.3}
+.progress{min-width:260px;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.ptext{color:var(--muted);font-size:12.5px}
+.bar{width:260px;height:10px;border-radius:999px;background:#eef2ff;border:1px solid var(--line);overflow:hidden}
+.bar > div{
+  height:100%;
+  width:0;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  border-radius:999px;
+}
+@media (max-width:860px){ .progress{min-width:180px} .bar{width:180px} }
+
+/* question card */
+.card{
+  border:1px solid var(--line);
+  background: var(--card);
+  border-radius:var(--radius);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+    background: rgba(255,255,255,.92);
+
+}
+.hd{
+  padding:14px 16px;border-bottom:1px solid var(--line);
+  display:flex;gap:12px;align-items:flex-start;justify-content:space-between
+}
+.qno{
+  font-weight:900;
+  color:#fff;
+  background: rgba(79,70,229,.92);
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  white-space:nowrap
+}
+.qtext{flex:1}
+.qtext .qtitle{margin:0 0 6px;font-weight:900}
+.qtext .qdesc{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+.body{padding:14px 16px}
+.hint{color:var(--muted);font-size:12.5px;margin:0 0 10px;line-height:1.45}
+
+/* sort UI */
+.rankbox{display:grid;grid-template-columns:repeat(6, minmax(0,1fr));gap:10px;margin-bottom:12px}
+.slot{
+  border:1px dashed rgba(109,118,138,.35);
+  background: #fbfcff;
+  border-radius:14px;
+  min-height:62px;
+  padding:8px 8px 10px;
+  display:flex;flex-direction:column;gap:6px;justify-content:center
+}
+.slot .lab{font-size:11px;color:var(--muted)}
+.slot .pick{
+  font-size:13px;font-weight:900;line-height:1.15;
+  display:flex;align-items:center;justify-content:space-between;gap:8px
+}
+.slot .x{
+  font-size:12px;color:#b11212;
+  border:1px solid rgba(224,106,106,.45);
+  background: rgba(224,106,106,.10);
+  padding:2px 8px;border-radius:999px;cursor:pointer;
+  opacity:.95
+}
+.slot.empty .pick{color:rgba(27,31,42,.35);font-weight:800}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  padding:12px 12px;border-radius:14px;
+  border:1px solid var(--line);
+  background: #ffffff;
+  cursor:pointer;user-select:none;
+  display:flex;align-items:center;justify-content:center;
+  min-width:150px;
+  font-weight:900;
+  transition:.15s transform,.15s border-color,.15s box-shadow;
+  box-shadow: 0 3px 10px rgba(15,23,42,.05);
+}
+.chip:hover{transform:translateY(-1px);border-color:rgba(124,92,255,.35)}
+.chip.disabled{opacity:.45;cursor:not-allowed;transform:none}
+.chip.selected{
+  background: rgba(31,168,168,.10);
+  border-color: rgba(31,168,168,.55);
+  box-shadow: 0 0 0 3px rgba(31,168,168,.10) inset;
+}
+
+/* scale UI */
+.scale{display:grid;gap:12px}
+.row{
+  border:1px solid var(--line);
+  background: #fbfcff;
+  border-radius:14px;padding:10px 12px
+}
+.rowtop{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.lbl{font-weight:900}
+.pill{font-size:11px;color:var(--muted);border:1px solid rgba(109,118,138,.25);padding:2px 8px;border-radius:999px}
+.scoreline{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap}
+.scoreBtns{display:flex;gap:6px;flex-wrap:wrap}
+.sbtn{
+  width:36px;height:34px;border-radius:12px;
+  border:1px solid rgba(109,118,138,.25);
+  background: #ffffff;
+  color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-weight:900;
+  transition:.12s transform,.12s border-color,.12s background
+}
+.sbtn:hover{transform:translateY(-1px);border-color:rgba(124,92,255,.35)}
+.sbtn.active{
+  background: rgba(31,168,168,.12);
+  border-color: rgba(31,168,168,.55);
+  box-shadow: 0 0 0 3px rgba(31,168,168,.10) inset;
+}
+.ends{display:flex;gap:8px;color:var(--muted);font-size:11px;white-space:nowrap}
+
+/* nav */
+.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:14px}
+.leftNav{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{
+  border:1px solid var(--line);
+  background: #ffffff;
+  color:var(--ink);
+  padding:10px 12px;border-radius:14px;
+  cursor:pointer;transition:.15s transform, .15s border-color;
+  font-weight:900
+}
+button:hover{transform:translateY(-1px);border-color:rgba(31,168,168,.35)}
+button:active{transform:translateY(0)}
+.primary{
+  background: linear-gradient(180deg, rgba(31,168,168,.98), rgba(79,70,229,.86));
+  color:#fff;
+  border-color:rgba(31,168,168,.45)
+}
+.ghost{background:transparent}
+.danger{border-color:rgba(224,106,106,.55)}
+.danger:hover{border-color:rgba(224,106,106,.85)}
+.msg{color:var(--muted);font-size:12.5px}
+
+/* ========== RESULT PAGE ========== */
+.section{
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  margin-top:14px;
+}
+.secHead{
+  background: var(--purple);
+  color:#fff;
+  padding:14px 18px;
+  font-weight:900;
+  letter-spacing:.2px;
+  display:flex;align-items:center;gap:10px;
+  font-size:22px;
+}
+.secBody{padding:16px 18px 18px}
+
+.namebar{
+  background: var(--bluebar);
+  border-radius:16px;
+  padding:16px 18px;
+  display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+  font-weight:900;
+  color:#1c6fb8;
+  margin-bottom:14px;
+}
+.namebar .lab{font-size:28px}
+.namebar .sub{font-size:28px}
+.namebar input{
+  border:1px solid rgba(28,111,184,.25);
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:16px;
+  font-weight:800;
+  outline:none;
+  min-width:220px;
+  background:#fff;
+}
+
+.analysisGrid{
+  display:grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap:18px;
+  align-items:start;
+}
+@media (max-width:900px){ .analysisGrid{grid-template-columns:1fr} }
+
+.barList{display:grid;gap:14px}
+.barItem{display:grid;grid-template-columns: 34px 92px 1fr 70px;gap:12px;align-items:center}
+.bubble{
+  width:30px;height:30px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;
+  font-size:14px;
+}
+.tname{font-weight:900;font-size:22px}
+.track2{
+  height:18px;border-radius:10px;background:#f3f5fb;
+  position:relative;overflow:hidden;border:1px solid #eef1f7;
+}
+.fill2{height:100%;width:0;border-radius:10px}
+.scoreTag{
+  font-weight:900;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:10px;
+  text-align:center;
+  font-size:14px;
+  min-width:66px;
+}
+
+.ruleBox{
+  color:#3b3f4b;
+  font-size:18px;
+  line-height:1.8;
+  padding-top:6px;
+}
+.ruleBox .hi{color:#e53935;font-weight:900}
+.ruleBox .mid{color:#f59e0b;font-weight:900}
+.ruleBox .lo{color:#3b82f6;font-weight:900}
+
+.resultCode{
+  margin-top:16px;
+  background: var(--bluebar);
+  border-radius:16px;
+  padding:16px 18px;
+  font-weight:900;
+  color:#1c6fb8;
+  font-size:26px;
+}
+.resultCode span{color:#1aa3a3}
+
+/* Guide section */
+.guideGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:16px;
+  align-items:stretch;
+}
+@media (max-width:900px){ .guideGrid{grid-template-columns:1fr} }
+
+.guideCard{
+  border:1px solid var(--line);
+  background:#fff;
+  min-height:320px;
+  display:flex;
+  flex-direction:column;
+}
+.guideTitle{
+  font-weight:900;
+  font-size:26px;
+  color:#fff;
+  padding:16px 16px;
+  text-align:center;
+}
+.gBody{
+  padding:16px 18px;
+  color:#60656f;
+  font-size:20px;
+  line-height:1.75;
+  flex:1;
+}
+
+/* ========== COVER PAGE ========== */
+.cover{
+  border:1px solid var(--line);
+  background: linear-gradient(180deg, var(--coverSoft), #ffffff);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.coverTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:18px 18px 14px;
+  border-bottom:1px solid var(--line);
+}
+.brandTitle{display:flex;gap:12px;align-items:flex-start}
+.brandMark{
+  width:44px;height:44px;border-radius:14px;
+  background: linear-gradient(135deg, var(--coverMain), var(--coverDeep));
+  box-shadow: 0 10px 18px rgba(245,158,11,.25);
+  flex:0 0 44px;
+}
+.brandText h2{margin:0;font-size:28px;font-weight:1000}
+.brandText p{
+  margin:6px 0 0;
+  color: var(--muted);
+  font-size:14px;
+  line-height:1.5;
+}
+.coverBtns{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.cbtn{
+  border:none;
+  padding:12px 18px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:1000;
+  color:#fff;
+  font-size:18px;
+  box-shadow: 0 10px 18px rgba(15,23,42,.12);
+}
+.cbtn.start{ background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.cbtn.view{ background: linear-gradient(135deg, #fb923c, #f97316); }
+.cbtn:active{ transform: translateY(1px); }
+
+.coverHero{padding:18px 18px 6px}
+.heroLine{display:flex;gap:12px;align-items:flex-start}
+.heroBar{
+  width:10px;
+  min-height:90px;
+  border-radius:999px;
+  background: linear-gradient(180deg, var(--coverMain), var(--coverSub));
+  flex:0 0 10px;
+}
+.heroText h3{margin:0;font-size:26px;font-weight:1000}
+.heroText .quote{
+  margin:10px 0 0;
+  color: #475467;
+  line-height:1.8;
+  font-size:15px;
+}
+.heroText .quote b{font-weight:1000}
+
+.coverMid{
+  padding:8px 18px 18px;
+  color: var(--muted);
+  font-size:14px;
+  line-height:1.8;
+}
+
+.featureTitle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:1000;
+  font-size:18px;
+  margin:8px 18px 0;
+  color: var(--coverDeep);
+}
+.featureTitle .diamond{
+  width:10px;height:10px;
+  display:inline-block;
+  border-radius:3px;
+  background: var(--coverMain);
+}
+
+.features{
+  padding:10px 18px 20px;
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap:16px;
+}
+@media (max-width: 980px){
+  .brandText h2{ font-size:24px; }
+  .cbtn{ font-size:16px; }
+  .features{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 520px){
+  .features{ grid-template-columns: 1fr; }
+}
+
+.fcard{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height:220px;
+  box-shadow: 0 8px 18px rgba(15,23,42,.06);
+}
+.ficonWrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px 16px 12px;
+}
+.ficon{
+  width:88px;height:88px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;
+  background: #fff3cd;
+  color: var(--coverDeep);
+  font-size:38px;
+  border:2px solid rgba(245,158,11,.35);
+   box-shadow: 0 8px 16px rgba(245,158,11,.25);
+}
+.fbar{
+  margin-top:auto;
+  padding:14px 14px;
+  font-weight:900;
+  color:#fff;
+  line-height:1.4;
+  background: linear-gradient(135deg, var(--coverMain), var(--coverSub));
+}
+/* 結果圖卡：放在興趣結果下面 */
+.resultImageBlock{
+  margin-top:14px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff7e6;   /* 淡橘底，跟你主色一致 */
+  padding:18px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow: var(--shadow);
+}
+
+.resultImageBlock img{
+  max-width:100%;
+  height:auto;
+  object-fit:contain;
+}
+
+.gap{height:12px}
+
+.radarWrap{
+  position:relative;
+  width:min(760px, 100%);
+}
+.radarWrap img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+.radarWrap canvas{
+  position:absolute;
+  left:0; top:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.resultImageBlock{
+  margin-top:14px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  padding:18px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow: var(--shadow);
+}
+
+#radarChart{
+  width:min(560px, 100%);
+  aspect-ratio: 1 / 1;
+  height:auto;
+  display:block;
+}
+
+</style>
+
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- Question header (hidden on result) -->
+    <div class="topbar" id="topbar">
+      <div class="title">
+        <h1>Holland測驗（10題）</h1>
+        <p id="subtitle">請依直覺作答</p>
+      </div>
+      <div class="progress">
+        <div class="ptext" id="ptext">第 1 / 11 頁</div>
+        <div class="bar"><div id="pbar"></div></div>
+      </div>
+    </div>
+
+    <div class="card" id="pageCard"></div>
+
+  </div>
+
+<script>
+/** ====== RIASEC（內部計分 & 結果呈現用） ====== */
+const RIASEC = [
+  { key:"R", name:"實做型",  desc:"喜歡動手做、工具設備、把東西修好做出來。", emoji:"🔧" },
+  { key:"I", name:"研究型",  desc:"善於觀察、思考、分析推理，喜歡用頭腦解決問題並追根究底。", emoji:"🔍" },
+  { key:"A", name:"藝術型",  desc:"重視創意與美感，喜歡表達風格、設計、發想。", emoji:"🎨" },
+  { key:"S", name:"社交型",  desc:"樂於助人、喜歡互動與引導，重視人的感受。", emoji:"🤝" },
+  { key:"E", name:"企業型",  desc:"精力旺盛、喜歡競爭與影響他人，擅長推動與說服。", emoji:"📣" },
+  { key:"C", name:"常規型",  desc:"謹慎有條理，喜歡規矩與精確，擅長整理與流程。", emoji:"🗂️" },
+];
+const keyToMeta = Object.fromEntries(RIASEC.map(x => [x.key, x]));
+/** ====== 興趣導航：白話解析（加強版） ====== */
+const TYPE_GUIDE = {
+  A: {
+    tagline: "靠靈感吃飯的人",
+    bullets: [
+      "喜歡創意、設計、表達自我，對美感很敏感，腦中常常很多點子",
+      "不太愛被規則綁住，實務細節和瑣事容易覺得煩躁",
+      "適合畫畫、寫作、設計、表演這種可以自由發揮的工作",
+    ],
+  },
+  C: {
+    tagline: "最會把事情整理好的人",
+    bullets: [
+      "喜歡有流程、有規則、有表格的工作，重視穩定與秩序",
+      "做事細心負責，但對變化和臨時改動比較沒那麼喜歡",
+      "適合行政、會計、文書、專案管理",
+    ],
+  },
+  E: {
+    tagline: "天生帶頭衝的那種人",
+    bullets: [
+      "喜歡主導、說服、影響他人，有企圖心和行動力",
+      "有時會比較急、重結果，細節和耐心需要別人補足",
+      "適合創業、業務、主管、行銷、帶團隊",
+    ],
+  },
+  I: {
+    tagline: "腦力型玩家",
+    bullets: [
+      "喜歡分析、研究、找答案，對數字、理論、邏輯有興趣",
+      "比較享受獨立工作，社交和情緒表達不是最強項",
+      "適合工程師、研究員、數據分析、顧問",
+    ],
+  },
+  R: {
+    tagline: "動手做最安心",
+    bullets: [
+      "喜歡實際操作、修理、建造，看得到成果最有成就感",
+      "不太愛空談理論，比較不擅長表達內心感受",
+      "適合工程、技術、維修、戶外工作",
+    ],
+  },
+  S: {
+    tagline: "為了人而存在的人",
+    bullets: [
+      "喜歡幫助別人、聊天、陪伴、教學，很有同理心",
+      "怕衝突、不太愛做冷冰冰的決策",
+      "適合老師、社工、諮詢、客服、教練",
+    ],
+  },
+};
+
+/** ====== 題庫：1~6 排序題（UI不顯示型別） ====== */
+const sortQuestions = [
+  { id:1, title:"新創公司專案",
+    desc:"你剛加入一間新創公司，團隊正在開發全新產品，老闆請大家自行選擇最想投入的工作內容。請依照你內心真實偏好排序",
+    options:[ {text:"組裝測試",type:"R"},{text:"數據分析",type:"I"},{text:"視覺設計",type:"A"},{text:"團隊關懷",type:"S"},{text:"對外行銷",type:"E"},{text:"文件整理",type:"C"} ]
+  },
+  { id:2, title:"大型活動籌備",
+    desc:"你參與一場大型活動的籌備團隊，大家可以自由選擇最想負責的工作內容，沒有對錯，只看你的真實偏好",
+    options:[ {text:"架設設備",type:"R"},{text:"流程規劃",type:"I"},{text:"主視覺設計",type:"A"},{text:"接待來賓",type:"S"},{text:"招募贊助",type:"E"},{text:"名單管理",type:"C"} ]
+  },
+  { id:3, title:"研究計畫團隊",
+    desc:"你被邀請加入跨領域研究計畫，團隊需要分工合作完成任務，請依你最想投入的角色排序",
+    options:[ {text:"操作儀器",type:"R"},{text:"邏輯推理",type:"I"},{text:"發想概念",type:"A"},{text:"引導受試者",type:"S"},{text:"成果發表",type:"E"},{text:"數據整理",type:"C"} ]
+  },
+  { id:4, title:"旅行突發狀況",
+    desc:"你和朋友出國旅行時遇到突發狀況，原定行程被打亂，大家需要臨時分工處理，請依你自然會想做的事排序",
+    options:[ {text:"處理交通方式",type:"R"},{text:"重新規劃路線",type:"I"},{text:"想新玩法",type:"A"},{text:"安撫團員",type:"S"},{text:"協商溝通",type:"E"},{text:"更新行程",type:"C"} ]
+  },
+  { id:5, title:"經營自媒體",
+    desc:"你要和朋友一起經營自媒體頻道，每個人分工合作，請依你最想負責的部分排序",
+    options:[ {text:"拍攝剪輯",type:"R"},{text:"主題研究",type:"I"},{text:"內容創意",type:"A"},{text:"社群互動",type:"S"},{text:"商業合作",type:"E"},{text:"後台管理",type:"C"} ]
+  },
+  { id:6, title:"任務模擬系統",
+    desc:"你進入一個任務模擬系統，只能選擇一個主要角色來完成任務，請依你最想扮演的角色排序",
+    options:[ {text:"修復系統",type:"R"},{text:"問題分析",type:"I"},{text:"創意策略",type:"A"},{text:"心理支援",type:"S"},{text:"任務指揮",type:"E"},{text:"資訊管理",type:"C"} ]
+  },
+];
+
+/** ====== 題庫：7~10 量表題（點 1~7；UI不顯示型別） ====== */
+const scaleSets = [
+  { id:7, title:"個性傾向量表",
+    desc:"請依你真實的個性選擇符合程度",
+    left:"最不符合", right:"最符合",
+    items:[
+      {text:"喜歡動手做事",type:"R"},{text:"偏好直接行動",type:"R"},
+      {text:"愛追根究底",type:"I"},{text:"對新知好奇",type:"I"},
+      {text:"重視美感創意",type:"A"},{text:"喜歡自我表達",type:"A"},
+      {text:"容易感受他人",type:"S"},{text:"喜歡幫人成長",type:"S"},
+      {text:"享受影響他人",type:"E"},{text:"想帶領推動",type:"E"},
+      {text:"喜歡規則流程",type:"C"},{text:"做事注意細節",type:"C"},
+    ]
+  },
+  { id:8, title:"活動興趣量表",
+    desc:"請依你對以下活動的喜好作答",
+    left:"最不喜歡", right:"最喜歡",
+    items:[
+      {text:"操作工具設備",type:"R"},{text:"DIY 組裝安裝",type:"R"},
+      {text:"蒐集資料分析",type:"I"},{text:"解決邏輯難題",type:"I"},
+      {text:"繪畫設計作品",type:"A"},{text:"發想創意點子",type:"A"},
+      {text:"關心他人狀態",type:"S"},{text:"教導陪伴他人",type:"S"},
+      {text:"說服影響他人",type:"E"},{text:"主導團體活動",type:"E"},
+      {text:"整理文件資料",type:"C"},{text:"建立流程系統",type:"C"},
+    ]
+  },
+  { id:9, title:"職業喜好量表",
+    desc:"不考慮能力與現實條件，請依你對職業的直覺喜好作答",
+    left:"最不喜歡", right:"最喜歡",
+    items:[
+      {text:"設備維修人員",type:"R"},{text:"工程技術人員",type:"R"},
+      {text:"研究分析人員",type:"I"},{text:"數據科學工作",type:"I"},
+      {text:"視覺設計工作",type:"A"},{text:"內容創作工作",type:"A"},
+      {text:"心理輔導工作",type:"S"},{text:"教育教學工作",type:"S"},
+      {text:"行銷企劃主管",type:"E"},{text:"創業經營者",type:"E"},
+      {text:"行政管理人員",type:"C"},{text:"會計事務人員",type:"C"},
+    ]
+  },
+  { id:10, title:"能力自評量表",
+    desc:"請依你對自身能力的感覺作答",
+    left:"最不符合", right:"最符合",
+    items:[
+      {text:"能操作工具設備",type:"R"},{text:"能解決技術問題",type:"R"},
+      {text:"擅長分析推理",type:"I"},{text:"能理解複雜概念",type:"I"},
+      {text:"能創作或設計",type:"A"},{text:"想像力很豐富",type:"A"},
+      {text:"能體察他人情緒",type:"S"},{text:"人際相處很順",type:"S"},
+      {text:"能影響他人決策",type:"E"},{text:"能帶領團隊行動",type:"E"},
+      {text:"善於規劃與整理",type:"C"},{text:"做事細心有條理",type:"C"},
+    ]
+  }
+];
+/** ====== 題庫：11~15 單選題（性格向；每題 6 選 1；UI不顯示型別） ====== */
+const singleQuestions = [
+  {
+    id: 11,
+    title: "你最常被說的風格",
+    desc: "如果身邊的人用一句話形容你，你覺得哪個最像？",
+    options: [
+      { text: "喜歡直接把事情完整做出來", type: "R" },
+      { text: "習慣先想清楚再執行", type: "I" },
+      { text: "比較重視感受與美感", type: "A" },
+      { text: 很會照顧別人的感受", type: "S" },
+      { text: "喜歡推動大家往前進", type: "E" },
+      { text: "做事有規則、很有條理", type: "C" },
+    ],
+  },
+  {
+    id: 12,
+    title: "你的能量來源",
+    desc: "當你狀態不好、需要充電時，你最容易被哪種方式拉回來？",
+    options: [
+      { text: "動一動、做點實作，身體先回來", type: "R" },
+      { text: "安靜思考、整理脈絡，腦袋回到清晰", type: "I" },
+      { text: "沉浸在創作、音樂、影像或靈感裡", type: "A" },
+      { text: "找人聊聊、被理解或去支持別人", type: "S" },
+      { text: "設定目標、開始行動，越做越有勁", type: "E" },
+      { text: "收拾環境、排好順序，生活變得可控", type: "C" },
+    ],
+  },
+  {
+    id: 13,
+    title: "你面對選擇的習慣",
+    desc: "當你要做重大決定，你更常用哪種方式下判斷？",
+    options: [
+      { text: "先試再說，做了就知道對不對", type: "R" },
+      { text: "先分析利弊、資訊夠了才決定", type: "I" },
+      { text: "看感覺與想像，選那個最有火花的", type: "A" },
+      { text: "想想會不會影響到別人、關係和諧嗎", type: "S" },
+      { text: "看哪個更能達成目標、帶來成果", type: "E" },
+      { text: "選風險較可控、流程較穩的那個", type: "C" },
+    ],
+  },
+  {
+    id: 14,
+    title: "你最在意的被尊重方式",
+    desc: "你最希望別人怎麼對你，才會覺得「有被尊重」？",
+    options: [
+      { text: "別人信任我能把事情做完，別管太多", type: "R" },
+      { text: "別人願意聽我把邏輯講清楚，不亂下結論", type: "I" },
+      { text: "別人欣賞我的獨特想法，不要把我框住", type: "A" },
+      { text: "別人重視我的感受，用溫和方式溝通", type: "S" },
+      { text: "別人給我舞台與決策空間，讓我推進", type: "E" },
+      { text: "別人遵守約定與規則，事情按標準來", type: "C" },
+    ],
+  },
+  {
+    id: 15,
+    title: "你最受不了的狀況",
+    desc: "在團隊或人際裡，哪種狀況最容易讓你瞬間煩躁？",
+    options: [
+      { text: "光說不做、拖拖拉拉，事情都卡住", type: "R" },
+      { text: "不講證據只憑感覺，邏輯亂七八糟", type: "I" },
+      { text: "一直被限制、沒有空間發揮創意", type: "A" },
+      { text: "講話太冷太衝，完全不顧別人感受", type: "S" },
+      { text: "沒有方向、沒人負責，整團散掉", type: "E" },
+      { text: "規則不清、一直改來改去，流程超混亂", type: "C" },
+    ],
+  },
+];
+
+/** ====== Pages ====== */
+const pages = [
+  { kind:"cover", id:0, data:null },
+  ...sortQuestions.map(q => ({ kind:"sort", id:q.id, data:q })),
+  ...scaleSets.map(s => ({ kind:"scale", id:s.id, data:s })),
+  ...singleQuestions.map(q => ({ kind:"single", id:q.id, data:q })), // ✅ 新增
+  { kind:"result", id:16, data:null },
+];
+
+
+/** ====== State ====== */
+const state = {
+  pageIndex: 0,
+  sortAnswers: {},
+  scaleAnswers: {},
+  singleAnswers: {}, 
+  userName: "",
+};
+
+const pageCard = document.getElementById("pageCard");
+const ptext = document.getElementById("ptext");
+const pbar = document.getElementById("pbar");
+const subtitle = document.getElementById("subtitle");
+const topbar = document.getElementById("topbar");
+
+function renderPage(){
+  const page = pages[state.pageIndex];
+  pageCard.innerHTML = "";
+
+  if (page.kind === "cover"){
+    topbar.style.display = "none";
+    pageCard.style.display = "block";
+    pageCard.appendChild(renderCoverPage());
+    window.scrollTo({top:0, behavior:"smooth"});
+    return;
+  }
+
+  if (page.kind === "result"){
+    topbar.style.display = "none";
+    pageCard.style.display = "none";
+    renderResultSections();
+    window.scrollTo({top:0, behavior:"smooth"});
+    return;
+  }
+
+  // questions
+  topbar.style.display = "flex";
+  pageCard.style.display = "block";
+  updateHeader();
+
+  if (page.kind === "sort") pageCard.appendChild(renderSortPage(page.data));
+  if (page.kind === "scale") pageCard.appendChild(renderScalePage(page.data));
+  if (page.kind === "single") pageCard.appendChild(renderSinglePage(page.data)); // ✅ 放這裡
+}
+
+function updateHeader(){
+  const cur = state.pageIndex + 1;
+  const total = pages.length;
+  ptext.textContent = `第 ${cur} / ${total} 頁`;
+  pbar.style.width = `${(cur/total)*100}%`;
+
+}
+
+/** ====== Sort Page ====== */
+function renderCoverPage(){
+  const wrap = document.createElement("div");
+  wrap.className = "cover";
+
+  wrap.innerHTML = `
+    <div class="coverTop">
+      <div class="brandTitle">
+        <div class="brandMark"></div>
+        <div class="brandText">
+          <h2><span class="holland">Holland</span> <span class="tag">職涯測驗</span></h2>
+          <p>施測數超過200萬人次！</p>
+        </div>
+      </div>
+
+      <div class="coverBtns">
+        <button class="cbtn start" id="btnStart">開始測驗</button>
+        <button class="cbtn view" id="btnView">觀看結果</button>
+      </div>
+    </div>
+
+    <div class="coverHero">
+      <div class="heroLine">
+        <div class="heroBar"></div>
+        <div class="heroText">
+          <h3>運用你的天賦，在對的位置發光！</h3>
+          <div class="quote">
+            每個人都是天才，但如果你用爬樹的能力評斷一條魚，牠將終其一生覺得自己是個笨蛋。<br>
+            <b>— 愛因斯坦（Albert Einstein）</b>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coverMid">
+      只要透過職涯測驗掌握興趣、價值觀、特質等面向，就能找到最適合自己發展的方向
+
+    </div>
+
+    <div class="featureTitle">
+      <span class="diamond"></span>
+      四大特色
+    </div>
+
+<div class="features">
+  <div class="fcard">
+    <div class="ficonWrap"><div class="ficon">⏱️</div></div>
+    <div class="fbar">1.10分鐘，看懂職涯方向</div>
+  </div>
+
+  <div class="fcard">
+    <div class="ficonWrap"><div class="ficon">🧠</div></div>
+    <div class="fbar">2.了解自身深層優勢發揮</div>
+  </div>
+
+  <div class="fcard">
+    <div class="ficonWrap"><div class="ficon">📊</div></div>
+    <div class="fbar">3.找尋個人職涯定位</div>
+  </div>
+
+  <div class="fcard">
+    <div class="ficonWrap"><div class="ficon">📱</div></div>
+    <div class="fbar">4.個人關係調整</div>
+  </div>
+</div>
+
+  `;
+
+  // 開始測驗：跳到第一題（封面後的第 2 頁）
+  wrap.querySelector("#btnStart").addEventListener("click", () => {
+    state.pageIndex = 1; // cover 是 0，所以第一題是 1
+    renderPage();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  // 觀看結果：若未完成就提醒；完成才進結果頁
+  wrap.querySelector("#btnView").addEventListener("click", () => {
+    const ok = isAllComplete();
+    if (!ok){
+      alert("你還沒完成作答～先按「開始測驗」跑完題目，結果才會準喔 ✅");
+      return;
+    }
+    state.pageIndex = pages.length - 1;
+    renderPage();
+  });
+
+  return wrap;
+}
+function isAllComplete(){
+  // 1~6：排序題都要填滿 6 個
+  for (const q of sortQuestions){
+    const picks = state.sortAnswers[q.id];
+    if (!picks || picks.length !== 6) return false;
+  }
+  // 7~10：量表題每一小題都要填
+  for (const set of scaleSets){
+    if (!isScaleComplete(set.id, set.items.length)) return false;
+  }
+  // 11~15：單選題每題都要選 1 個
+  for (const q of singleQuestions){
+    const v = state.singleAnswers[q.id];
+    if (!(v >= 0 && v < q.options.length)) return false;
+  }
+  return true;
+}
+
+function renderSortPage(q){
+  const frag = document.createElement("div");
+
+  const hd = document.createElement("div");
+  hd.className = "hd";
+  hd.innerHTML = `
+    <div class="qno">題目 ${q.id}</div>
+    <div class="qtext">
+      <p class="qtitle">${esc(q.title)}</p>
+      <p class="qdesc">${esc(q.desc)}</p>
+    </div>
+  `;
+  frag.appendChild(hd);
+
+  const body = document.createElement("div");
+  body.className = "body";
+
+  const hint = document.createElement("p");
+  hint.className = "hint";
+  body.appendChild(hint);
+
+  const picks = state.sortAnswers[q.id] || [];
+
+  const rankbox = document.createElement("div");
+  rankbox.className = "rankbox";
+  for (let r=0; r<6; r++){
+    const optIdx = picks[r];
+    const isEmpty = (optIdx === undefined);
+    const slot = document.createElement("div");
+    slot.className = "slot" + (isEmpty ? " empty" : "");
+    slot.innerHTML = `
+      <div class="lab">第 ${r+1} 名</div>
+      <div class="pick">
+        <span>${esc(isEmpty ? "（尚未選擇）" : q.options[optIdx].text)}</span>
+        ${isEmpty ? "" : `<span class="x" data-r="${r}">×</span>`}
+      </div>
+    `;
+    rankbox.appendChild(slot);
+  }
+  body.appendChild(rankbox);
+
+  const chips = document.createElement("div");
+  chips.className = "chips";
+  q.options.forEach((opt, idx) => {
+    const used = picks.includes(idx);
+    const chip = document.createElement("div");
+    chip.className = "chip" + (used ? " disabled" : "");
+    chip.textContent = opt.text;
+    chip.addEventListener("click", () => {
+      if (used) return;
+      const cur = state.sortAnswers[q.id] ? [...state.sortAnswers[q.id]] : [];
+      if (cur.length >= 6) return;
+      cur.push(idx);
+      state.sortAnswers[q.id] = cur;
+      renderPage();
+    });
+    chips.appendChild(chip);
+  });
+  body.appendChild(chips);
+
+  body.addEventListener("click", (e) => {
+    const x = e.target.closest(".x");
+    if (!x) return;
+    const r = Number(x.dataset.r);
+    const cur = state.sortAnswers[q.id] ? [...state.sortAnswers[q.id]] : [];
+    cur.splice(r, 1);
+    if (cur.length) state.sortAnswers[q.id] = cur;
+    else delete state.sortAnswers[q.id];
+    renderPage();
+  });
+
+  body.appendChild(renderNav({
+    canPrev: state.pageIndex > 0,
+    canNext: picks.length === 6,
+    nextLabel: (state.pageIndex === pages.length - 2) ? "看結果" : "下一題",
+    onPrev: () => { state.pageIndex--; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    onNext: () => { state.pageIndex++; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    extraLeftButtons: [
+      { label:"重新選擇", className:"ghost danger", onClick: () => { delete state.sortAnswers[q.id]; renderPage(); } }
+    ],
+  }));
+
+  frag.appendChild(body);
+  return frag;
+}
+
+/** ====== Scale Page (require all items chosen) ====== */
+function renderScalePage(set){
+  const frag = document.createElement("div");
+
+  const hd = document.createElement("div");
+  hd.className = "hd";
+  hd.innerHTML = `
+    <div class="qno">題目 ${set.id}</div>
+    <div class="qtext">
+      <p class="qtitle">${esc(set.title)}</p>
+      <p class="qdesc">${esc(set.desc)}</p>
+    </div>
+  `;
+  frag.appendChild(hd);
+  const body = document.createElement("div");
+  body.className = "body";
+
+  const hint = document.createElement("p");
+  hint.className = "hint";
+  body.appendChild(hint);
+
+  if (!state.scaleAnswers[set.id]) state.scaleAnswers[set.id] = {};
+
+  const scale = document.createElement("div");
+  scale.className = "scale";
+
+  set.items.forEach((it, idx) => {
+    const v = state.scaleAnswers[set.id][idx] ?? null;
+
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div class="rowtop">
+        <div class="lbl">${esc(it.text)}</div>
+        <div><span class="pill" id="sv-${set.id}-${idx}">分數：${v ?? "未選"}</span></div>
+      </div>
+      <div class="scoreline">
+        <div class="ends"><span>${esc(set.left)}（1）</span></div>
+        <div class="scoreBtns"></div>
+        <div class="ends"><span>${esc(set.right)}（7）</span></div>
+      </div>
+    `;
+
+    const btnWrap = row.querySelector(".scoreBtns");
+    for (let s=1; s<=7; s++){
+      const b = document.createElement("div");
+      b.className = "sbtn" + (s === v ? " active" : "");
+      b.textContent = String(s);
+      b.addEventListener("click", () => {
+        state.scaleAnswers[set.id][idx] = s;
+        btnWrap.querySelectorAll(".sbtn").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        row.querySelector(`#sv-${set.id}-${idx}`).textContent = `分數：${s}`;
+        updateNavState(set);
+      });
+      btnWrap.appendChild(b);
+    }
+
+    scale.appendChild(row);
+  });
+
+  body.appendChild(scale);
+
+  const nav = renderNav({
+    canPrev: state.pageIndex > 0,
+    canNext: isScaleComplete(set.id, set.items.length),
+    nextLabel: (state.pageIndex === pages.length - 2) ? "看結果" : "下一題",
+    onPrev: () => { state.pageIndex--; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    onNext: () => { state.pageIndex++; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    extraLeftButtons: [
+      { label:"全部清除", className:"ghost danger", onClick: () => { state.scaleAnswers[set.id] = {}; renderPage(); } }
+    ],
+    note: scaleNote(set.id, set.items.length)
+  });
+  nav.id = "nav";
+  body.appendChild(nav);
+
+  frag.appendChild(body);
+  return frag;
+}
+function renderSinglePage(q){
+  const frag = document.createElement("div");
+
+  const hd = document.createElement("div");
+  hd.className = "hd";
+  hd.innerHTML = `
+    <div class="qno">題目 ${q.id}</div>
+    <div class="qtext">
+      <p class="qtitle">${esc(q.title)}</p>
+      <p class="qdesc">${esc(q.desc)}</p>
+    </div>
+  `;
+  frag.appendChild(hd);
+
+  const body = document.createElement("div");
+  body.className = "body";
+
+  const hint = document.createElement("p");
+  hint.className = "hint";
+  hint.textContent = "選一個最像你的就好，不用想太多～";
+  body.appendChild(hint);
+
+  const picked = state.singleAnswers[q.id];
+
+  const chips = document.createElement("div");
+  chips.className = "chips";
+
+  q.options.forEach((opt, idx) => {
+    const chip = document.createElement("div");
+    const isSel = (picked === idx);
+    chip.className = "chip" + (isSel ? " selected" : "");
+    chip.textContent = opt.text;
+
+    chip.addEventListener("click", () => {
+      state.singleAnswers[q.id] = idx;
+      renderPage();
+    });
+
+    chips.appendChild(chip);
+  });
+
+  body.appendChild(chips);
+
+  body.appendChild(renderNav({
+    canPrev: state.pageIndex > 0,
+    canNext: (picked >= 0),
+    nextLabel: (state.pageIndex === pages.length - 2) ? "看結果" : "下一題",
+    onPrev: () => { state.pageIndex--; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    onNext: () => { state.pageIndex++; renderPage(); window.scrollTo({top:0,behavior:"smooth"}); },
+    extraLeftButtons: [
+      { label:"清除選擇", className:"ghost danger", onClick: () => { delete state.singleAnswers[q.id]; renderPage(); } }
+    ],
+  }));
+
+  frag.appendChild(body);
+  return frag;
+}
+
+function renderNav({canPrev, canNext, nextLabel, onPrev, onNext, extraLeftButtons=[], note=""}){
+  const nav = document.createElement("div");
+  nav.className = "nav";
+
+  const left = document.createElement("div");
+  left.className = "leftNav";
+
+  extraLeftButtons.forEach(b => {
+    const btn = document.createElement("button");
+    btn.className = b.className || "ghost";
+    btn.textContent = b.label;
+    btn.addEventListener("click", b.onClick);
+    left.appendChild(btn);
+  });
+
+  if (canPrev){
+    const prev = document.createElement("button");
+    prev.className = "ghost";
+    prev.textContent = "上一題";
+    prev.addEventListener("click", onPrev);
+    left.appendChild(prev);
+  }
+
+  const right = document.createElement("div");
+  right.className = "leftNav";
+
+  const msg = document.createElement("div");
+  msg.className = "msg";
+  msg.id = "navMsg";
+  msg.textContent = note;
+
+  const next = document.createElement("button");
+  next.className = "primary";
+  next.textContent = nextLabel;
+  next.disabled = !canNext;
+  if (next.disabled){
+    next.style.opacity = ".45";
+    next.style.cursor = "not-allowed";
+    next.style.transform = "none";
+  }
+  next.addEventListener("click", () => {
+    if (!next.disabled) onNext();
+  });
+
+  right.appendChild(msg);
+  right.appendChild(next);
+
+  nav.appendChild(left);
+  nav.appendChild(right);
+  return nav;
+}
+
+function updateNavState(set){
+  const nav = document.getElementById("nav");
+  if (!nav) return;
+  const nextBtn = nav.querySelector("button.primary");
+  const msg = document.getElementById("navMsg");
+  const ok = isScaleComplete(set.id, set.items.length);
+  msg.textContent = scaleNote(set.id, set.items.length);
+
+  nextBtn.disabled = !ok;
+  nextBtn.style.opacity = ok ? "1" : ".45";
+  nextBtn.style.cursor = ok ? "pointer" : "not-allowed";
+}
+
+function isScaleComplete(setId, n){
+  const a = state.scaleAnswers[setId] || {};
+  for (let i=0; i<n; i++){
+    const v = a[i];
+    if (!(v >= 1 && v <= 7)) return false;
+  }
+  return true;
+}
+function scaleNote(setId, n){
+  const a = state.scaleAnswers[setId] || {};
+  let filled = 0;
+  for (let i=0; i<n; i++){
+    const v = a[i];
+    if (v >= 1 && v <= 7) filled++;
+  }
+  return (filled === n) ? "可以下一題" : `還差 ${n - filled} 小題`;
+}
+
+function computeRawScores_Q1_10(){
+  const score = {R:0,I:0,A:0,S:0,E:0,C:0};
+
+  // sort: rank points 6..1
+  sortQuestions.forEach(q => {
+    const picks = state.sortAnswers[q.id];
+    if (!picks || picks.length !== 6) return;
+    for (let rank=0; rank<6; rank++){
+      const opt = q.options[picks[rank]];
+      score[opt.type] += (6 - rank);
+    }
+  });
+
+  // scale: direct add 1..7
+  scaleSets.forEach(set => {
+    const a = state.scaleAnswers[set.id] || {};
+    set.items.forEach((it, idx) => {
+      score[it.type] += Number(a[idx] ?? 0);
+    });
+  });
+
+  return score;
+}
+function computeRawScores_Q11_15(){
+  const score = {R:0,I:0,A:0,S:0,E:0,C:0};
+
+  singleQuestions.forEach(q => {
+    const idx = state.singleAnswers[q.id];
+    if (!(idx >= 0)) return;
+    const opt = q.options[idx];
+    score[opt.type] += 1;
+  });
+
+  return score;
+}
+
+
+// 1~10 每型最大值：排序 6題 * (6+5+4+3+2+1)=21 => 126，但分散到六型（每題每型各出現一次）
+// 你原本的計法是「每型 sort 最大 36」(每題最多把某型排第一得6，共6題=36) + scale 每型 8題*7=56 => 92
+const MAX_Q1_10_PER_TYPE = 92;
+
+// 11~15 每型最大值：5 題都選同一型 => 5
+const MAX_Q11_15_PER_TYPE = 5;
+
+function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+// 加權後的「0~1」
+function computeWeighted01(){
+  const a = computeRawScores_Q1_10();
+  const b = computeRawScores_Q11_15();
+
+  const out = {R:0,I:0,A:0,S:0,E:0,C:0};
+  for (const k of ["R","I","A","S","E","C"]){
+    const n1 = clamp01((a[k] ?? 0) / MAX_Q1_10_PER_TYPE);
+    const n2 = clamp01((b[k] ?? 0) / MAX_Q11_15_PER_TYPE);
+    out[k] = 0.6 * n1 + 0.4 * n2;   // ✅ 60% / 40%
+  }
+  return out;
+}
+
+// 顯示用 0~10（你後面規則用 7.0 / 5.5 / 5.4 所以維持 0~10）
+function to10_from01(n01){
+  const v = n01 * 10;
+  return Math.max(1, Math.min(10, v)); // 保留你原本的下限習慣
+}
+
+// 給條形用的百分比（0~100）
+function toPct_from01(n01){
+  return n01 * 100;
+}
+
+
+
+function getTop3(scoreRaw){
+  const sorted = Object.entries(scoreRaw).sort((a,b)=>b[1]-a[1]);
+  return sorted.slice(0,3).map(([k,v])=>k);
+}
+
+function getClarityLabel(top1){
+  // 用 0~100 的 top1 來判斷（跟你截圖那段規則一致）
+  if (top1 >= 70) return "較高";
+  if (top1 >= 55) return "中等";
+  return "較低";
+}
+function drawRiasecRadar(canvas, score10){
+  if (!canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const cssSize = canvas.clientWidth || 520; // 以 CSS 寬為主
+  const size = Math.round(cssSize * dpr);
+
+  canvas.width = size;
+  canvas.height = size;
+
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight || w;
+
+  ctx.clearRect(0,0,w,h);
+
+  // === 基本設定 ===
+  const cx = w / 2;
+  const cy = h / 2;
+  const R = Math.min(w, h) * 0.36;
+
+  // 軸順序：R(上) → I → A → S(下) → E → C（順時針）
+  const axes = ["R","I","A","S","E","C"];
+  const axisName = {
+    R:"實做型", I:"研究型", A:"藝術型", S:"社交型", E:"企業型", C:"常規型"
+  };
+
+  // 角度：上方起始 -90°
+  const start = -Math.PI / 2;
+  const step = (Math.PI * 2) / axes.length;
+
+  // === 畫網格（刻度 2/4/6/8/10）===
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(15,23,42,.12)";
+  ctx.fillStyle = "rgba(15,23,42,.55)";
+  ctx.font = "12px ui-sans-serif, system-ui, -apple-system, 'Noto Sans TC', sans-serif";
+
+  const rings = [2,4,6,8,10];
+  rings.forEach(v => {
+    const rr = R * (v / 10);
+    ctx.beginPath();
+    for (let i=0;i<axes.length;i++){
+      const ang = start + step*i;
+      const x = cx + rr * Math.cos(ang);
+      const y = cy + rr * Math.sin(ang);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  });
+
+  // 軸線
+  for (let i=0;i<axes.length;i++){
+    const ang = start + step*i;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R*Math.cos(ang), cy + R*Math.sin(ang));
+    ctx.stroke();
+  }
+
+  // 刻度文字（放在上方軸的內側）
+  ctx.fillStyle = "rgba(102,112,133,.9)";
+  rings.forEach(v => {
+    const rr = R * (v / 10);
+    ctx.fillText(String(v), cx + 6, cy - rr + 4);
+  });
+
+  // === 取分數（1~10）轉成點座標 ===
+  const pts = axes.map((k, i) => {
+    const ang = start + step*i;
+    const s = Math.max(1, Math.min(10, Number(score10[k] ?? 1)));
+    const rr = R * (s / 10);
+    return {
+      k,
+      s,
+      x: cx + rr * Math.cos(ang),
+      y: cy + rr * Math.sin(ang),
+      ang
+    };
+  });
+
+  // === 畫資料多邊形 ===
+  ctx.beginPath();
+  pts.forEach((p, idx) => idx===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+  ctx.closePath();
+
+  // 填色/線色：用你的品牌 teal + indigo 的感覺
+  ctx.fillStyle = "rgba(31,168,168,.20)";
+  ctx.strokeStyle = "rgba(31,168,168,.95)";
+  ctx.lineWidth = 3;
+  ctx.fill();
+  ctx.stroke();
+
+  // 點點
+  ctx.fillStyle = "rgba(79,70,229,.95)";
+  pts.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4, 0, Math.PI*2);
+    ctx.fill();
+  });
+
+  // === 外圈標籤（R/I/A/S/E/C + 分數）===
+  ctx.fillStyle = "rgba(15,23,42,.88)";
+  ctx.font = "13px ui-sans-serif, system-ui, -apple-system, 'Noto Sans TC', sans-serif";
+  const labelR = R * 1.12;
+
+  pts.forEach(p => {
+    const lx = cx + labelR * Math.cos(p.ang);
+    const ly = cy + labelR * Math.sin(p.ang);
+
+    // 對齊：靠左右分佈
+    const cos = Math.cos(p.ang);
+    if (cos > 0.25) ctx.textAlign = "left";
+    else if (cos < -0.25) ctx.textAlign = "right";
+    else ctx.textAlign = "center";
+
+    ctx.textBaseline = "middle";
+    ctx.fillText(`${p.k} ${axisName[p.k]}  ${p.s.toFixed(1)}`, lx, ly);
+  });
+}
+
+/** ====== Result Sections (Analysis + Guide) ====== */
+function renderResultSections(){
+  // remove any previous sections
+  document.querySelectorAll(".section").forEach(x => x.remove());
+
+const w01 = computeWeighted01();
+
+// 顯示用：1~10
+const score10 = Object.fromEntries(Object.entries(w01).map(([k,v])=>[k,to10_from01(v)]));
+
+// 長條用：0~100%
+const pct = Object.fromEntries(Object.entries(w01).map(([k,v])=>[k,toPct_from01(v)]));
+
+// Top3 用加權後的分數（更符合你新規則）
+const top3 = Object.entries(score10)
+  .sort((a,b)=>b[1]-a[1])
+  .slice(0,3)
+  .map(([k])=>k);
+
+const code = top3.join("");
+
+  // order fixed like screenshot
+  const order = ["E","C","I","S","R","A"];
+
+  const dateStr = formatDate(new Date());
+  const top1Score = score10[top3[0]];
+
+  // ===== Analysis
+  const sec1 = document.createElement("div");
+  sec1.className = "section";
+  sec1.innerHTML = `
+    <div class="secHead">◷ 結果分析 Analysis</div>
+    <div class="secBody">
+      <div class="namebar">
+        <div class="lab">姓名：</div>
+        <input id="nameInput" placeholder="請輸入姓名" value="${esc(state.userName)}" />
+        <div class="sub">日期：${dateStr}</div>
+      </div>
+
+      <div class="analysisGrid">
+        <div class="barList" id="barList"></div>
+
+        <div class="ruleBox">
+          以上分數用來表示你對該類型之興趣程度高低：<br>
+        <span class="hi">7.0分以上</span>：興趣程度較高，可優先選擇此類型發展。<br>
+<span class="mid">5.5~6.9分</span>：興趣程度中等，不特別喜歡但尚可接受。<br>
+<span class="lo">5.4分以下</span>：興趣程度較低，甚至可能有些排斥。
+
+        </div>
+      </div>
+
+      <div class="resultCode">
+        你的興趣結果： <span>${code}</span>
+      </div>
+<div class="resultImageBlock">
+  <canvas id="radarChart" aria-label="RIASEC 雷達圖"></canvas>
+</div>
+
+</div>
+
+
+
+      <div class="gap"></div>
+
+      <div class="nav">
+        <div class="leftNav">
+          <button class="ghost" id="backToQ">回到上一題</button>
+          <button class="danger ghost" id="resetAll">全部重填</button>
+        </div>
+        <div class="leftNav">
+          <button class="primary" id="copyBtn">複製結果</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.querySelector(".wrap").appendChild(sec1);
+// ✅ 等 canvas 真的存在了再抓、再畫
+const radar = document.getElementById("radarChart");
+const paintRadar = () => {
+  if (!radar) return;
+  // 有時候剛插入那一瞬間尺寸還沒算好，補一個保險
+  requestAnimationFrame(() => drawRiasecRadar(radar, score10));
+};
+
+paintRadar();
+window.addEventListener("resize", paintRadar);
+  // draw bars
+  const barList = document.getElementById("barList");
+  order.forEach(k => {
+    const m = keyToMeta[k];
+   const w = pct[k];        // 0~100 用來畫長度
+const v = score10[k];    // 1~10 用來顯示分數
+    const row = document.createElement("div");
+    row.className = "barItem";
+    row.innerHTML = `
+      <div class="bubble" style="background: var(--c${k});">${k}</div>
+      <div class="tname">${m.name}</div>
+      <div class="track2"><div class="fill2" style="background: var(--c${k}); width:${Math.max(0,Math.min(100,w))}%;
+"></div></div>
+      <div class="scoreTag" style="background: var(--c${k});">${v.toFixed(1)}</div>
+    `;
+    barList.appendChild(row);
+  });
+
+  // name binding
+  const nameInput = document.getElementById("nameInput");
+  nameInput.addEventListener("input", () => { state.userName = nameInput.value.trim(); });
+
+  // copy/back/reset
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+ const sorted = Object.entries(score10).sort((a,b)=>b[1]-a[1]);
+const top3txt = sorted.slice(0,3).map(([k,v]) => `${keyToMeta[k].name} ${v.toFixed(1)}`).join(" / ");
+const txt = `姓名：${state.userName || "（未填）"}\n日期：${dateStr}\n興趣結果：${code}\nTop3：${top3txt}\n分數：` +
+  order.map(k => `${k}:${score10[k].toFixed(1)}`).join(", ");
+
+    try{ await navigator.clipboard.writeText(txt); alert("已複製到剪貼簿 ✅"); }
+    catch{ prompt("複製失敗，請手動複製：", txt); }
+  });
+
+  document.getElementById("backToQ").addEventListener("click", () => {
+    // go back to Q10 page
+    document.querySelectorAll(".section").forEach(x => x.remove());
+    topbar.style.display = "flex";
+    pageCard.style.display = "block";
+    state.pageIndex = pages.length - 2;
+    renderPage();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  document.getElementById("resetAll").addEventListener("click", () => {
+    if (!confirm("確定要全部重填嗎？")) return;
+    state.pageIndex = 0;
+    state.sortAnswers = {};
+    state.scaleAnswers = {};
+    state.singleAnswers = {}; // ✅ 新增
+    state.userName = "";
+    document.querySelectorAll(".section").forEach(x => x.remove());
+    topbar.style.display = "flex";
+    pageCard.style.display = "block";
+    renderPage();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  // ===== Guide
+  const sec2 = document.createElement("div");
+  sec2.className = "section";
+  sec2.innerHTML = `
+    <div class="secHead">▶ 興趣導航 Guide</div>
+    <div class="secBody">
+      <div class="guideGrid">
+        ${guideTypeCard("主型", top3[0], true)}
+        ${guideTypeCard("副型", top3[1], false)}
+        ${guideTypeCard("副型", top3[2], false)}
+      </div>
+    </div>
+  `;
+  document.querySelector(".wrap").appendChild(sec2);
+} // ✅ 這個一定要有！！renderResultSections 到這裡結束
+
+
+
+function guideTypeCard(roleLabel, typeKey, isMain){
+  const m = keyToMeta[typeKey];
+  const g = TYPE_GUIDE[typeKey] || { tagline:"", bullets:[] };
+
+const bg = isMain
+  ? "linear-gradient(135deg, rgba(79,70,229,.95), rgba(31,168,168,.95))"
+  : "linear-gradient(135deg, rgba(242,179,94,.95), rgba(31,168,168,.75))";
+
+
+  const bulletsHtml = (g.bullets || [])
+    .map(t => `<li>${esc(t)}</li>`)
+    .join("");
+
+  return `
+    <div class="guideCard">
+      <div class="guideTitle" style="background:${bg}">
+        ${roleLabel}：${m.name}
+      </div>
+
+      <div class="gBody">
+        <div style="font-weight:900;color:#2c7bd3;margin-bottom:8px;">
+          ${typeKey} ${m.name}：${esc(g.tagline)}
+        </div>
+
+        <ul style="margin:0;padding-left:22px;">
+          ${bulletsHtml}
+        </ul>
+
+        <div style="margin-top:10px;color:#8a93a3;font-size:16px;line-height:1.6;">
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/** ====== Result Nav ====== */
+function goToResult(){
+  state.pageIndex = pages.length - 1;
+  renderPage();
+}
+
+/** ====== Utilities ====== */
+function esc(str){
+  return String(str ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function drawRiasecRadarOnImage(pctMap){
+  const img = document.getElementById("radarImg");
+  const canvas = document.getElementById("radarCanvas");
+  if (!img || !canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+
+  // 讓 canvas 像素尺寸跟圖片顯示尺寸一致（畫起來才不糊）
+  const cw = img.clientWidth;
+  const ch = img.clientHeight;
+  if (cw <= 0 || ch <= 0) return;
+
+  canvas.width = Math.round(cw * dpr);
+  canvas.height = Math.round(ch * dpr);
+
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // 用 CSS 像素作畫
+
+  ctx.clearRect(0, 0, cw, ch);
+
+  // === 這組座標是依你提供的那張底圖（710x512）量出來的比例 ===
+  const CX = cw * 0.427;
+  const CY = ch * 0.430;
+  const R  = Math.min(cw, ch) * 0.367;
+
+  // 軸順序：R(上) → I → A → S(下) → E → C（順時針）
+  const axes = ["R","I","A","S","E","C"];
+  const startDeg = -90;
+  const stepDeg = 360 / axes.length;
+
+  const pts = axes.map((k, i) => {
+    const deg = startDeg + stepDeg * i;
+    const rad = deg * Math.PI / 180;
+    const p = Math.max(0, Math.min(100, Number(pctMap[k] ?? 0)));
+    const rr = R * (p / 100);
+    return { x: CX + rr * Math.cos(rad), y: CY + rr * Math.sin(rad) };
+  });
+
+  // 填色 + 外框（用你的品牌色系）
+  ctx.beginPath();
+  pts.forEach((p, idx) => idx === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+  ctx.closePath();
+
+  ctx.fillStyle = "rgba(31,168,168,0.22)";
+  ctx.strokeStyle = "rgba(31,168,168,0.9)";
+  ctx.lineWidth = 3;
+
+  ctx.fill();
+  ctx.stroke();
+
+  // 每個點加小圓點（更有感）
+  ctx.fillStyle = "rgba(79,70,229,0.95)";
+  pts.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function formatDate(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${y}/${m}/${dd}`;
+}
+
+/** ====== Init ====== */
+renderPage();
+
+// When last question "next" pressed, it naturally goes to result page because pages include result as last page.
+// So ensure Q10 next goes to result:
+(function patchLastNext(){
+  // nothing needed; pages already include result, navigation increments pageIndex.
+})();
+</script>
+</body>
+</html> 
